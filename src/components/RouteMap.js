@@ -1,35 +1,21 @@
-import React, { useEffect } from 'react';
-import { YMaps, Map, GeolocationControl } from '@pbe/react-yandex-maps';
+import React, { useRef } from 'react';
+import { YMaps, Map } from '@pbe/react-yandex-maps';
 
-const RouteMap = ({ ymaps, start, end }) => {
-    useEffect(() => {
-        if (ymaps && start && end) {
-            const multiRoute = new ymaps.multiRouter.MultiRoute(
-                {
-                    referencePoints: [start, end],
-                    params: {
-                        routingMode: 'auto'
-                    }
-                },
-                {
-                    boundsAutoApply: true
-                }
-            );
+const RouteMap = ({ locationA, locationB, addRoute }) => {
+    const map = useRef(null);
 
-            ymaps.modules.require(['MultiRouteCustomView'], function (MultiRouteCustomView) {
-                const multiRouteCustomView = new MultiRouteCustomView();
-                multiRoute.options.set('routeView', multiRouteCustomView);
-            });
-
-            ymaps.modules.require(['multiRouter.MultiRoute']).then(function () {
-                ymaps.geocode(start).then((res) => {
-                    multiRoute.model.setReferencePoints([res.geoObjects.get(0).geometry.getCoordinates(), end]);
-                });
-            });
-        }
-    }, [ymaps, start, end]);
-
-    return null;
+    return (
+        <div className="RouteMap">
+            <YMaps>
+                <Map
+                    modules={["multiRouter.MultiRoute"]}
+                    defaultState={{ center: locationA, zoom: 12 }}
+                    instanceRef={map}
+                    onLoad={() => addRoute(map.current)}
+                />
+            </YMaps>
+        </div>
+    );
 };
 
 export default RouteMap;

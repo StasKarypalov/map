@@ -17,7 +17,11 @@ const Search = ({ onSearch }) => {
             setError(null); 
         } catch (error) {
             console.error('Error during search:', error);
-            setError('Произошла ошибка при поиске. Пожалуйста, попробуйте еще раз.');
+            alert('Произошла ошибка при поиске. Пожалуйста, попробуйте еще раз.');
+        }
+        ///
+        {
+
         }
     };
 
